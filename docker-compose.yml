@@ -4,8 +4,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    #    tty: true
     volumes:
       - ./vue:/usr/src/app
     command: npm run dev
+    #    command: >
+    #      bash -c "
+    #      javac 'C:/Users/atsuk/Desktop/MinecraftDevelopments/Plugins/TestWebServer/src/main/java/com/github/ryuzu/TestWebServer/Main.java' &&
+    #      java 'C:/Users/atsuk/Desktop/MinecraftDevelopments/Plugins/TestWebServer/src/main/java/com/github/ryuzu/TestWebServer/Main.java'"
     ports:
-      - 5173:5173
+      - "5173:5173"
