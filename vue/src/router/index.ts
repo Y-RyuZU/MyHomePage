@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import TestView from "../views/TestView.vue"
 import TestAnimation from "../views/TestAnimation.vue";
 import LoadExcel from "../views/LoadExcel.vue";
+import AudioTest from "../components/AudioTest.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +30,11 @@ const router = createRouter({
             path: "/load-excel",
             name: "load-excel",
             component: LoadExcel
+        },
+        {
+            path: "/audio-test",
+            name: "audio-test",
+            component: AudioTest
         },
         {
             path: "/test-animation",
