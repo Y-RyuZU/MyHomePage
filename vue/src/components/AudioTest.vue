@@ -1,16 +1,19 @@
 <template>
     <div>
-        <audio ref="audioElement" v-bind:src="blobAddress"></audio>
+        <audio @timeupdate="" ref="audioElement" v-bind:src="blobAddress"></audio>
+        <!--        <AudioWrapper v-bind:src="blobAddress"/>-->
         <input v-model="address" class="address" placeholder="Audio address"/>
         <p>
-            <time id="playback_position">{{ convertTime(progress) }}</time>
-            <input type="range" v-model="progress" @input="setCurrentTime" v-bind:max="duration" min="0" step="1">
-            <time id="end_position">{{ convertTime(duration) }}</time>
+            <time id="playback_position">{{ convertTime(currentTime()) }}</time>
+            <input type="range" v-bind:value="currentTime()" @input="setCurrentTime($event.target.value)"
+                   v-bind:max="duration()" min="0" step="1">
+            <time id="end_position">{{ convertTime(duration()) }}</time>
         </p>
-        <button @click="play" v-bind:disabled="duration === 0">再生</button>
-        <button @click="stop" v-bind:disabled="!isPlaying">停止</button>
-        <input v-model="speed" @input="setPlayBackRate" min="0.25" max="16" step="0.05" type="range"/>
-        <p>再生速度: {{ speed }}</p>
+        <button @click="play" v-bind:disabled="currentTime() === -1">再生</button>
+        <button @click="stop" v-bind:disabled="!isPlaying()">停止</button>
+        <input v-bind:value="playbackRate()" @input="setPlayBackRate($event.target.value)" min="0.25" max="16"
+               step="0.05" type="range" v-bind:disabled="currentTime() === -1"/>
+        <p>再生速度: {{ playbackRate() }}</p>
     </div>
 </template>
 
@@ -18,14 +21,15 @@
 import {defineComponent, ref, watch} from "vue"
 
 export default defineComponent({
+    // components: {AudioWrapper: () => import("./AudioWrapper.vue")},
     setup(props, ctx) {
         const audioElement = ref<HTMLAudioElement | null>(null)
         const address = ref("")
         const blobAddress = ref("")
-        const speed = ref(1)
-        const progress = ref(0);
-        const duration = ref(0)
-        const isPlaying = ref(false)
+
+        const isPlaying = () => {
+            return audioElement.value?.played ?? false
+        }
 
         const play = () => {
             audioElement.value?.play()
@@ -36,15 +40,27 @@ export default defineComponent({
             console.log(audioElement.value)
         }
 
+        const currentTime = () => {
+            return audioElement.value?.currentTime ?? -1
+        }
+
+        const duration = () => {
+            return audioElement.value?.duration ?? 0
+        }
+
+        const playbackRate = () => {
+            return audioElement.value?.playbackRate ?? 1
+        }
+
         const convertTime = function (time_position: number) {
             if (time_position == null) return "0:00"
 
             time_position = Math.floor(time_position);
-            var res;
+            let res: string;
 
             if (60 <= time_position) {
-                res = Math.floor(time_position / 60);
-                res += ":" + Math.floor(time_position % 60).toString().padStart(2, '0');
+                res = String(Math.floor(time_position / 60)) + ":";
+                res += Math.floor(time_position % 60).toString().padStart(2, '0');
             } else {
                 res = "0:" + Math.floor(time_position % 60).toString().padStart(2, '0');
             }
@@ -59,45 +75,32 @@ export default defineComponent({
             blobAddress.value = URL.createObjectURL(blob);
             audioElement.value = new Audio(blobAddress.value);
             audioElement.value?.setAttribute("src", blobAddress.value);
-            audioElement.value.currentTime = progress.value ?? 0;
-            audioElement.value.ontimeupdate = () => {
-                progress.value = audioElement.value?.currentTime ?? 0;
-            }
-            audioElement.value.onloadedmetadata = () => {
-                duration.value = audioElement.value?.duration ?? 0;
-            }
-            audioElement.value.onplay = () => {
-                isPlaying.value = true;
-            }
-            audioElement.value.onpause = () => {
-                isPlaying.value = false;
-            }
         })
 
-        const setCurrentTime = () => {
-            if (audioElement.value != null) {
-                audioElement.value.currentTime = progress.value;
+        const setPlayBackRate = (value: number) => {
+            if (audioElement.value?.playbackRate != null) {
+                audioElement.value.playbackRate = value
             }
         }
 
-        const setPlayBackRate = () => {
-            if (audioElement.value?.playbackRate != null) {
-                audioElement.value.playbackRate = speed.value
+        const setCurrentTime = (value: number) => {
+            if (audioElement.value?.currentTime != null) {
+                audioElement.value.currentTime = value;
             }
         }
 
         return {
             address,
             blobAddress,
-            speed,
             play,
             stop,
             convertTime,
-            setCurrentTime,
+            playbackRate,
             setPlayBackRate,
+            setCurrentTime,
             isPlaying,
             duration,
-            progress
+            currentTime,
         }
     }
 })

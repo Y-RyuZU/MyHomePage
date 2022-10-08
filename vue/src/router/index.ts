@@ -4,6 +4,7 @@ import TestView from "../views/TestView.vue"
 import TestAnimation from "../views/TestAnimation.vue";
 import LoadExcel from "../views/LoadExcel.vue";
 import AudioTest from "../components/AudioTest.vue";
+import AudioTest2 from "../views/AudioTest2.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,9 +38,19 @@ const router = createRouter({
             component: AudioTest
         },
         {
+            path: "/audio-test2",
+            name: "audio-test2",
+            component: AudioTest2
+        },
+        {
             path: "/test-animation",
             name: "test-animation",
             component: TestAnimation
+        },
+        {
+            path: "/1v1Question",
+            name: "1v1Question",
+            component: () => import('../views/1v1Question.vue')
         }
     ]
 })
