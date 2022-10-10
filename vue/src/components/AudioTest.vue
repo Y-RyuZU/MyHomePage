@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, ref, watch} from "vue"
+import {defineComponent, reactive, ref, watch} from "vue"
 
 export default defineComponent({
     // components: {AudioWrapper: () => import("./AudioWrapper.vue")},
@@ -26,6 +26,12 @@ export default defineComponent({
         const audioElement = ref<HTMLAudioElement | null>(null)
         const address = ref("")
         const blobAddress = ref("")
+        const reactiveObject = reactive({
+            currentTime: 0,
+            duration: 0,
+            playbackRate: 1,
+            isPlaying: false
+        })
 
         const isPlaying = () => {
             return audioElement.value?.played ?? false
@@ -101,9 +107,14 @@ export default defineComponent({
             isPlaying,
             duration,
             currentTime,
+            reactiveObject
         }
     }
 })
+
+function emits(arg0: string, value: number | undefined) {
+    throw new Error("Function not implemented.")
+}
 </script>
 
 <style scoped>

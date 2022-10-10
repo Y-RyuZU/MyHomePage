@@ -1,26 +1,32 @@
 <script setup lang="ts">
-import {RouterLink} from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 import TitleBar from "./components/TitleBar.vue";</script>
 
 <template>
-    <TitleBar/>
-    <header>
-        <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125"/>
+    <el-config-provider>
+        <el-container class="full-height">
+            <el-header>
+                <TitleBar/>
+            </el-header>
+            <el-main>
+                <RouterView class="router"/>
+            </el-main>
+            <el-footer>
 
-        <div class="wrapper">
-            <HelloWorld msg="You did it!!!!"/>
-            <p>AAAAA</p>
-
-            <nav>
-                <RouterLink to="/">Home</RouterLink>
-                <RouterLink to="/about">About</RouterLink>
-            </nav>
-        </div>
-    </header>
-    <RouterView class="router"/>
+            </el-footer>
+        </el-container>
+    </el-config-provider>
 </template>
 
 <style scoped>
+:global(body) {
+    margin: 0;
+}
 
+:global(body *) {
+    box-sizing: border-box;
+}
+
+.full-height {
+    height: 100vh;
+}
 </style>

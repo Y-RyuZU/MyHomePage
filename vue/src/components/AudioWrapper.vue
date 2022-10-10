@@ -1,5 +1,9 @@
 <template>
-    <audio ref="audioElement" @play="isPlay = true" @pause="isPlay = false"></audio>
+    <audio ref="audioElement"
+           :src="src"
+           @timeupdate="setCurrentTime($event.target.currentTime)"
+           @loadedmetadata="duration = $event.target.duration"
+    ></audio>
 </template>
 
 <script setup lang="ts">
@@ -7,29 +11,67 @@ import {computed, ref, watch} from "vue";
 
 const props = defineProps<{
     isPlay: boolean
+    currentTime: number
+    duration: number
+    playbackRate: number
+    src: string
 }>();
 
 const emits = defineEmits<{
-    (event: "update:isPlay", value: boolean): void
+    (event: "update:isPlay", value: boolean): void,
+    (event: "update:currentTime", value: number): void,
+    (event: "update:duration", value: number): void,
+    (event: "update:src", value: string): void,
+    (event: "update:playbackRate", value: number): void,
+    (event: "convertedCurrentTime", value: string): void,
+    (event: "convertedDuration", value: string): void,
 }>();
 
 const audioElement = ref<HTMLAudioElement | null>(null)
 
-const isPlay = computed({
-    get: () => props.isPlay,
-    set: (value) => emits("update:isPlay", value)
+const currentTime = computed({
+    get: () => props.currentTime,
+    set: (value: number) => {
+        console.log("currentTime", value)
+        if (audioElement.value != null) audioElement.value.currentTime = value
+        emits("convertedCurrentTime", convertTime(value));
+    }
 })
 
-const convertedCurrentTime = () => {
-    return convertTime(audioElement.value?.currentTime ?? 0)
-}
+const duration = computed({
+    get: () => props.duration,
+    set: (value: number) => {
+        emits("update:duration", value)
+        // convertedDuration.apply(value)
+    }
+})
 
-const convertedDuration = () => {
-    return convertTime(audioElement.value?.duration ?? 0)
-}
+const playbackRate = computed({
+    get: () => props.playbackRate,
+    set: (value: number) => {
+        emits("update:playbackRate", value)
+        if (audioElement.value != null) audioElement.value.playbackRate = value
+    }
+})
+
+const isPlay = computed({
+    get: () => props.isPlay,
+    set: (value: boolean) => emits("update:isPlay", value)
+})
+
+const src = computed({
+    get: () => props.src,
+    set: (value: string) => {
+        audioElement.value = new Audio(value);
+        if (audioElement.value != null) emits("update:src", value)
+    }
+})
+
+const convertedCurrentTime = () => emits("convertedCurrentTime", convertTime(currentTime.value))
+const convertedDuration = () => emits("convertedDuration", convertTime(duration.value))
 
 const convertTime = function (time_position: number) {
-    if (time_position == null) return "0:00"
+    if (!time_position) return "0:00"
 
     time_position = Math.floor(time_position);
     let res: string;
@@ -44,17 +86,38 @@ const convertTime = function (time_position: number) {
     return res;
 };
 
-watch(isPlay, (value) => {
-    if (value) {
-        audioElement.value?.play()
-    } else {
-        audioElement.value?.pause()
-    }
+const play = () => {
+    audioElement.value?.play()
+}
+
+const stop = () => {
+    audioElement.value?.pause()
+}
+
+watch(isPlay, (value: boolean) => {
+    if (value) audioElement.value?.play()
+    else audioElement.value?.pause()
 })
 
+watch(playbackRate, (value: number) => {
+    if (audioElement.value != null) audioElement.value.playbackRate = value
+})
+
+watch(currentTime, (value: number) => {
+    if (audioElement.value != null) audioElement.value.currentTime = value
+    emits("convertedCurrentTime", convertTime(value));
+})
+
+const setCurrentTime = (value: number) => {
+    console.log("setCurrentTime", value)
+    // emits("update:currentTime", value);
+    emits("convertedCurrentTime", convertTime(currentTime.value));
+}
+
+
 defineExpose({
-    convertedCurrentTime,
-    convertedDuration
+    play,
+    stop,
 })
 </script>
 

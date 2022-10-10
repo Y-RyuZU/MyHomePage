@@ -1,30 +1,17 @@
 <template>
-    <div>
-        <p v-for="n of count" :key="n">{{ text }}</p>
-    </div>
+    <el-row>
+        <el-col :span="8" :xs="24">
+            A
+        </el-col>
+        <el-col :span="16" :xs="24">
+            A
+        </el-col>
+    </el-row>
+    <p>test</p>
 </template>
 
-<script lang="ts">
-import {defineComponent, ref} from "vue"
-
-export default defineComponent({
-    setup(props, ctx) {
-        const text = ref("HEY!!!")
-        const count = ref(5)
-
-        setTimeout(() => {
-            text.value = "AAAAAA"
-            count.value = 20
-        }, 3 * 1000)
-
-        return {
-            text,
-            count
-        }
-    },
-})
+<script setup lang="ts">
 </script>
-
-<style scoped>
+<style scoped lang="scss">
 
 </style>

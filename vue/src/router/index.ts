@@ -1,6 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import TestView from "../views/TestView.vue"
+import TestView from "../views/TestView.vue";
 import TestAnimation from "../views/TestAnimation.vue";
 import LoadExcel from "../views/LoadExcel.vue";
 import AudioTest from "../components/AudioTest.vue";
@@ -41,6 +41,11 @@ const router = createRouter({
             path: "/audio-test2",
             name: "audio-test2",
             component: AudioTest2
+        },
+        {
+            path: "/1v1question",
+            name: "1v1question",
+            component: () => import('../views/1v1Question.vue'),
         },
         {
             path: "/test-animation",
