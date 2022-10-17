@@ -1,23 +1,56 @@
 <template>
     <div>
-        <el-button v-for="item in 5"
-                   :key="item"
-                   :class="['subject-button', item, { selected: selectedButton === item }]"
-                   @click="selectedButton = item"
+        <el-button v-for="(color , index) in subjects"
+                   :key="index"
+                   :style="{color: color}"
+                   :class="['subject-button',color , index, { selected: selectedButton === index }]"
+                   @click="selectedButton = index"
         >
             Default
         </el-button>
-        <el-scrollbar height="400px" :class="['scrollbar-demo']">
-            <p v-for="item in 20" :key="item" class="scrollbar-demo-item">{{ item }}</p>
-        </el-scrollbar>
+        <div v-for="(color,index) in subjects">
+            <el-scrollbar height="400px"
+                          :class="['scrollbar-demo']"
+                          v-if="selectedButton === index"
+            >
+                <p v-for="item in contents.get(color)"
+                   :key="item"
+                   :class="['scrollbar-demo-item']"
+                   :style="{color: color}"
+                   v-if="selectedButton === index"
+                >{{ item }}</p>
+            </el-scrollbar>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
+import {onBeforeMount, ref} from "vue";
+
+const subjects = ref(['orange', 'red', 'green', 'blue'] as const);
+type Subjects = typeof subjects.value[number];
+const contents = ref(new Map<Subjects, string[]>([
+    ['orange', []],
+    ['red', []],
+    ['green', []],
+    ['blue', []],
+]))
+
+onBeforeMount(async () => {
+    const response = await fetch(import.meta.env.MODE === "development" ? "http://localhost:9000/api/subjects/export" : "/api");
+    let json_data = await response.json()
+    for (const [key, value] of Object.entries(json_data)) {
+        console.log(key, "<:>", value)
+    }
+    contents.value.get("orange")?.push(...json_data);
+})
+
+contents.value.get("orange")?.push("100%オレンジジュース");
+contents.value.get("red")?.push("100%リンゴジュース");
+contents.value.get("green")?.push("100%メロンジュース");
+contents.value.get("blue")?.push("100%ブルーハワイジュース");
 
 let selectedButton = ref(0);
-
 </script>
 
 <style scoped lang="scss">

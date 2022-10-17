@@ -2,21 +2,25 @@
     <div>
         <AudioWrapper
                 v-model:src="blobAddress"
-                v-model:is-play="wrapper.isPlaying"
+                v-model:is-play="wrapper.isPlay"
                 v-model:current-time.number="wrapper.currentTime"
                 v-model:playback-rate.number="wrapper.playbackRate"
                 v-model:duration.number="wrapper.duration"
+                v-model:converted-current-time="wrapper.convertedCurrentTime"
+                v-model:converted-duration="wrapper.convertedDuration"
+                v-model:update="wrapper.update"
         />
         <input v-model="address" class="address" placeholder="Audio address"/>
         <p>
             <time id="currentTime">{{ wrapper.convertedCurrentTime }}</time>
-            <input type="range" v-model.number="wrapper.currentTime" v-bind:max="wrapper.duration" min="0" step="1">
+            <input type="range" :value="wrapper.currentTime" @input="setCurrentTime" :max="wrapper.duration" min="0"
+                   step="1">
             <time id="duration">{{ wrapper.convertedDuration }}</time>
         </p>
-        <button @click="wrapper.isPlaying = true" v-bind:disabled="wrapper.currentTime === -1">再生</button>
-        <button @click="wrapper.isPlaying = false" v-bind:disabled="!wrapper.isPlaying">停止</button>
+        <button @click="wrapper.isPlay = true" v-bind:disabled="wrapper.currentTime === -1">再生</button>
+        <button @click="wrapper.isPlay = false" v-bind:disabled="!wrapper.isPlay">停止</button>
         <input v-model.number="wrapper.playbackRate" min="0.25" max="16" step="0.05" type="range"
-               :disabled="!wrapper.isPlaying"/>
+               :disabled="!wrapper.isPlay"/>
         <p>再生速度: {{ wrapper.playbackRate }}</p>
     </div>
 </template>
@@ -27,20 +31,25 @@ import AudioWrapper from "../components/AudioWrapper.vue"
 
 const address = ref("");
 const blobAddress = ref("");
-// const currentTime = ref(0);
-// const duration = ref(0);
-// const playbackRate = ref(1);
 const wrapper = reactive({
     currentTime: 0,
     convertedCurrentTime: "00:00",
     convertedDuration: "00:00",
     duration: 0,
     playbackRate: 1,
-    isPlaying: false
+    isPlay: false,
+    update: false
 })
+
+const setCurrentTime = (e: Event) => {
+    const target = e.target as HTMLInputElement;
+    wrapper.currentTime = Number(target.value);
+    wrapper.update = true;
+}
 
 watch(address, async (newAddress) => {
     const response = await fetch(import.meta.env.MODE === "development" ? "http://localhost:10000/api/proxy?url=" + newAddress : "/api");
+    console.log(response);
     const blob = await response.blob();
     if (blobAddress.value != null) URL.revokeObjectURL(blobAddress.value)
     blobAddress.value = URL.createObjectURL(blob);

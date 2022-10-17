@@ -28,10 +28,10 @@ export default defineComponent({
             const response = await fetch(import.meta.env.MODE === "development" ? "http://localhost:10000/api/random_data" : "/api");
             let json_data = await response.json()
             head_key.value = Object.keys(json_data)[0];
-            head_value.value = Object.values(json_data)[0];
+            head_value.value = (Object.values(json_data)[0] as string);
             json_data = Object.entries(json_data);
             json_data.shift();
-            contents.value = Object.fromEntries(json_data);
+            contents.value = Object.fromEntries(json_data) as any;
         }
 
         return {
