@@ -1,45 +1,49 @@
-<script setup lang="ts">
-</script>
-
 <template>
-    <div>
-        <nav>
-            <ul>
-                <li><a href="/">HOME</a></li>
-                <li>
-                    <RouterLink to="/test-animation">test-animation</RouterLink>
-                </li>
-                <li>
-                    <RouterLink to="/load-excel">エクセルロード</RouterLink>
-                </li>
-                <li><a href="#">ブログ</a></li>
-                <li><a href="#">お問い合わせ</a></li>
-            </ul>
-        </nav>
-    </div>
+    <el-menu
+            :default-active="activeIndex"
+            class="el-menu-demo"
+            mode="horizontal"
+            @select="handleSelect"
+    >
+        <el-menu-item index="1">Processing Center</el-menu-item>
+        <el-sub-menu index="2">
+            <template #title>Workspace</template>
+            <el-menu-item index="2-1">item one</el-menu-item>
+            <el-menu-item index="2-2">item two</el-menu-item>
+            <el-menu-item index="2-3">item three</el-menu-item>
+            <el-sub-menu index="2-4">
+                <template #title>item four</template>
+                <el-menu-item index="2-4-1">item one</el-menu-item>
+                <el-menu-item index="2-4-2">item two</el-menu-item>
+                <el-menu-item index="2-4-3">item three</el-menu-item>
+            </el-sub-menu>
+        </el-sub-menu>
+        <el-menu-item index="3">Info</el-menu-item>
+        <el-menu-item index="4">Orders</el-menu-item>
+    </el-menu>
+    <el-switch
+            v-model="value1"
+            class="mb-2"
+            :active-icon="Moon"
+            :inactive-icon="Sunny"
+            inline-prompt
+    />
 </template>
 
+<script setup lang="ts">
+import {ref} from 'vue'
+import {Moon, Sunny} from '@element-plus/icons-vue'
+
+const activeIndex = ref('1')
+const handleSelect = (key: string, keyPath: string[]) => {
+    console.log(key, keyPath)
+}
+
+const value1 = ref(true)
+
+
+</script>
+
 <style scoped>
-ul {
-    display: flex;
-}
 
-li {
-    list-style: none;
-}
-
-a {
-    display: block;
-    text-decoration: none;
-    color: white;
-    margin-right: 35px;
-}
-
-nav {
-    padding-top: 5px;
-    box-sizing: border-box;
-    width: 100%;
-    height: 70px;
-    background-color: dimgray;
-}
 </style>

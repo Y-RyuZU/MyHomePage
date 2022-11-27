@@ -29,21 +29,16 @@ import {onBeforeMount, ref} from "vue";
 
 const subjects = ref(['orange', 'red', 'green', 'blue'] as const);
 type Subjects = typeof subjects.value[number];
-const contents = ref(new Map<Subjects, string[]>([
-    ['orange', []],
-    ['red', []],
-    ['green', []],
-    ['blue', []],
-]))
+const contents = ref(new Map<Subjects, string[]>)
+subjects.value.forEach((subject) => {
+    contents.value.set(subject, [])
+});
 
 onBeforeMount(async () => {
-    const response = await fetch(import.meta.env.MODE === "development" ? "http://localhost:9000/api/subjects/export" : "/api");
+    const response = await fetch(import.meta.env.MODE === "development" ? "http://localhost:10000/api/subjects/export" : "/api");
     let json_data = await response.json()
-    for (const [key, value] of Object.entries(json_data)) {
-        console.log(key, "<:>", value)
-    }
     contents.value.get("orange")?.push(...json_data);
-})
+});
 
 contents.value.get("orange")?.push("100%オレンジジュース");
 contents.value.get("red")?.push("100%リンゴジュース");
