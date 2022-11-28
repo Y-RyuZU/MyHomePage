@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TitleBar from "./components/TitleBar.vue";</script>
+import TitleBar from "./components/Header/TitleBar.vue";</script>
 
 <template>
     <el-config-provider>
