@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import {reactive, ref, watch} from "vue"
-import AudioWrapper from "../components/AudioWrapper.vue"
+import AudioWrapper from "../components/Contents/AudioPlayer/AudioWrapper.vue"
 
 const address = ref("");
 const blobAddress = ref("");

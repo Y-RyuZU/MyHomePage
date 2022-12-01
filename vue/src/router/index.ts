@@ -29,7 +29,7 @@ const router = createRouter({
         {
             path: "/audio-test",
             name: "audio-test",
-            component: () => import("../components/AudioTest.vue")
+            component: () => import("../components/Contents/AudioPlayer/AudioTest.vue")
         },
         {
             path: "/audio-test2",
@@ -54,7 +54,12 @@ const router = createRouter({
         {
             path: "/scheduleTable",
             name: "ScheduleTable",
-            component: () => import("../components/ScheduleTable.vue")
+            component: () => import("../components/Contents/Scheduler/ScheduleTable.vue")
+        },
+        {
+            path: "/loginform",
+            name: "LoginForm",
+            component: () => import("../components/Contents/LoginForm/LoginForm.vue")
         }
     ]
 })

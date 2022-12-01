@@ -7,10 +7,10 @@
 
             <el-col :span="20">
                 <el-menu
-                    :default-active="activeIndex"
-                    class="el-menu-demo"
-                    mode="horizontal"
-                    @select="handleSelect"
+                        :default-active="activeIndex"
+                        class="el-menu-demo"
+                        mode="horizontal"
+                        @select="handleSelect"
                 >
                     <el-menu-item index="1">Processing Center</el-menu-item>
                     <el-sub-menu index="2">
@@ -32,12 +32,12 @@
 
             <el-col :span="2" :offset="0">
                 <el-switch
-                    v-model="value1"
-                    class="mb-2 switch darkmode"
-                    :active-icon="Moon"
-                    :inactive-icon="Sunny"
-                    inline-prompt
-                    size="large"
+                        v-model="value1"
+                        class="mb-2 switch darkmode"
+                        :active-icon="Moon"
+                        :inactive-icon="Sunny"
+                        inline-prompt
+                        size="large"
                 />
             </el-col>
         </el-row>
