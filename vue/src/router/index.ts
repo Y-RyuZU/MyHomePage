@@ -52,7 +52,7 @@ const router = createRouter({
             component: () => import("../views/1v1Question.vue")
         },
         {
-            path: "/scheduleTable",
+            path: "/scheduletable",
             name: "ScheduleTable",
             component: () => import("../components/Contents/Scheduler/ScheduleTable.vue")
         },
@@ -63,5 +63,8 @@ const router = createRouter({
         }
     ]
 })
+
+const reader: FileReader = new FileReader();
+
 
 export default router

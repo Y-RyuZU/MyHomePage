@@ -1,5 +1,5 @@
 <template>
-    <el-space wrap style="width: 100%">
+    <el-space :fill="true" style="width: 100%">
         <el-row align="middle">
             <el-col :span="2">
                 <el-avatar :icon="UserFilled"/>
@@ -7,17 +7,20 @@
 
             <el-col :span="20">
                 <el-menu
-                        :default-active="activeIndex"
-                        class="el-menu-demo"
-                        mode="horizontal"
-                        @select="handleSelect"
+                    :default-active="activeIndex"
+                    class="el-menu-demo"
+                    mode="horizontal"
+                    @select="handleSelect"
+                    :router="true"
                 >
                     <el-menu-item index="1">Processing Center</el-menu-item>
                     <el-sub-menu index="2">
                         <template #title>Workspace</template>
-                        <el-menu-item index="2-1">item one</el-menu-item>
-                        <el-menu-item index="2-2">item two</el-menu-item>
-                        <el-menu-item index="2-3">item three</el-menu-item>
+                        <div v-for="(content, index) in contentsRow1" :key="content">
+                            <el-menu-item :index="'2-' + index" :route="'/' + content">
+                                {{ content }}
+                            </el-menu-item>
+                        </div>
                         <el-sub-menu index="2-4">
                             <template #title>item four</template>
                             <el-menu-item index="2-4-1">item one</el-menu-item>
@@ -30,14 +33,14 @@
                 </el-menu>
             </el-col>
 
-            <el-col :span="2" :offset="0">
+            <el-col :span="2">
                 <el-switch
-                        v-model="value1"
-                        class="mb-2 switch darkmode"
-                        :active-icon="Moon"
-                        :inactive-icon="Sunny"
-                        inline-prompt
-                        size="large"
+                    v-model="value1"
+                    class="mb-2 switch darkmode"
+                    :active-icon="Moon"
+                    :inactive-icon="Sunny"
+                    inline-prompt
+                    size="large"
                 />
             </el-col>
         </el-row>
@@ -52,6 +55,7 @@ const activeIndex = ref('1')
 const handleSelect = (key: string, keyPath: string[]) => {
     console.log(key, keyPath)
 }
+const contentsRow1 = ['loginform', 'scheduletable', 'test-animation', 'audio-test']
 
 const value1 = ref(true)
 

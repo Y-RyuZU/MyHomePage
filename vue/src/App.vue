@@ -6,7 +6,7 @@ import TitleBar from "./components/Header/TitleBar.vue";
 <template>
     <el-config-provider>
         <el-container class="full-height">
-            <el-header>
+            <el-header style="border-bottom: #181818 solid 0px">
                 <TitleBar/>
             </el-header>
             <el-main>
