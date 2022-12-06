@@ -64,7 +64,4 @@ const router = createRouter({
     ]
 })
 
-const reader: FileReader = new FileReader();
-
-
 export default router
