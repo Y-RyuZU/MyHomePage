@@ -1,4 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router'
+import pages from 'virtual:generated-pages'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,7 +30,7 @@ const router = createRouter({
         {
             path: "/audio-test",
             name: "audio-test",
-            component: () => import("../components/Contents/AudioPlayer/AudioTest.vue")
+            component: () => import("../components/contents/AudioPlayer/AudioTest.vue")
         },
         {
             path: "/audio-test2",
@@ -54,13 +55,23 @@ const router = createRouter({
         {
             path: "/scheduletable",
             name: "ScheduleTable",
-            component: () => import("../components/Contents/Scheduler/ScheduleTable.vue")
+            component: () => import("../components/contents/Scheduler/ScheduleTable.vue")
         },
         {
             path: "/loginform",
             name: "LoginForm",
-            component: () => import("../components/Contents/LoginForm/LoginForm.vue")
-        }
+            component: () => import("../components/contents/LoginForm/LoginForm.vue")
+        }, pages,
+        {
+            path: "/contentsmanager",
+            name: "ContentsManager",
+            component: () => import("../pages/ContentsManager.vue")
+        },
+        {
+            path: "/file-list",
+            name: "file-list",
+            component: () => import("../components/contents/fileoperator/file-list.vue")
+        },
     ]
 })
 
