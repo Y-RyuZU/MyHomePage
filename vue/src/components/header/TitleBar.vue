@@ -13,9 +13,9 @@
                     @select="handleSelect"
                     :router="true"
                 >
-                    <el-menu-item index="1">Processing Center</el-menu-item>
+                    <el-menu-item index="1">None!</el-menu-item>
                     <el-sub-menu index="2">
-                        <template #title>Workspace</template>
+                        <template #title>Contents</template>
                         <div v-for="(content, index) in contentsRow1" :key="content">
                             <el-menu-item :index="'2-' + index" :route="'/' + content">
                                 {{ content }}
@@ -28,15 +28,15 @@
                             <el-menu-item index="2-4-3">item three</el-menu-item>
                         </el-sub-menu>
                     </el-sub-menu>
-                    <el-menu-item index="3">Info</el-menu-item>
-                    <el-menu-item index="4">Orders</el-menu-item>
+                    <el-menu-item index="3">Infomation</el-menu-item>
+                    <el-menu-item index="4">Others</el-menu-item>
                 </el-menu>
             </el-col>
 
             <el-col :span="2">
                 <el-switch
                     v-model="value1"
-                    class="mb-2 switch darkmode"
+                    class="mb-2 switch"
                     :active-icon="Moon"
                     :inactive-icon="Sunny"
                     inline-prompt

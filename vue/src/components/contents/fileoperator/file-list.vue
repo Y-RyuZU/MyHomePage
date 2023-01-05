@@ -1,85 +1,103 @@
-<template :class="['demodemo']">
-    <!--    <el-row align="middle">-->
-    <!--        <directory-form-header :pass="pass"/>-->
-    <!--        <directory-form :class="['line']" v-for="item in files" :key="item" :pass="item"/>-->
-    <!--    </el-row>-->
-    <el-table
+<template>
+    <div style="display: flex; align-items: center">
+        <file-list-tree/>
+        <el-table
             :data="tableData"
             style="width: 100%"
             highlight-current-row
             @current-change="handleCurrentChange"
-    >
         >
-        <el-table-column prop="date" label="Date"/>
-        <el-table-column prop="name" label="Name"/>
-        <el-table-column prop="zip" label="Zip"/>
-        <el-table-column label="Address Info" fixed="right">
-            <el-table-column prop="state" label="State"/>
-            <el-table-column prop="city" label="City"/>
-            <el-table-column prop="address" label="Address"/>
-        </el-table-column>
-    </el-table>
+            <el-table-column prop="name" label="Name">
+                <template #default="scope">
+                    <div style="display: flex; align-items: center">
+                        <el-icon :size="20">
+                            <Folder/>
+                        </el-icon>
+                        <span style="margin-left: 10px">{{ scope.row.name }}</span>
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="size" label="Size"/>
+            <el-table-column prop="lastUpdate" label="Last Update"/>
+            <el-table-column prop="lastEditor" label="Last Editor"/>
+            <el-table-column align="right" width="450">
+                <template #header>
+                    <div style="display: flex; align-items: center">
+                        <file-list-header :selecting="selecting" @tree="tree = true"/>
+                        <el-input v-model="search" size="small" placeholder="Type to search"/>
+                    </div>
+                </template>
+                <template #default="scope">
+                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+                    <el-button
+                        size="small"
+                        type="danger"
+                        @click="handleDelete(scope.$index, scope.row)"
+                    >Delete
+                    </el-button
+                    >
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
 </template>
 
 <script setup lang="ts">
 import {ref} from 'vue'
 import {ElTable} from 'element-plus'
+import {Folder} from '@element-plus/icons-vue'
+import FileListHeader from "@/components/contents/fileoperator/file-list-header.vue";
+import FileListTree from "@/components/contents/fileoperator/file-list-tree.vue";
+import { defineStore } from "pinia";
 
-const files = ref(['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] as const);
-
-const currentRow = ref()
-const singleTableRef = ref<InstanceType<typeof ElTable>>()
-
-interface User {
-    date: string
+interface File {
     name: string
-    address: string
+    size: number
+    unit: string
+    type: "file" | "folder"
+    lastUpdate: string
+    lastEditor: string
 }
 
-const setCurrent = (row?: User) => {
-    singleTableRef.value!.setCurrentRow(row)
+const tree = ref(false)
+
+const selecting = ref<File>()
+
+const getType = (name: string) => {
+    return name.endsWith('.' + new RegExp('.*')) ? 'file' : 'folder'
 }
-const handleCurrentChange = (val: User | undefined) => {
-    currentRow.value = val
+const handleCurrentChange = (val: File | undefined) => {
+    selecting.value = val
 }
 const tableData = [
     {
-        date: '2016-05-03',
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: 'No. 189, Grove St, Los Angeles',
-        zip: 'CA 90036',
+        name: 'None1',
+        size: '1',
+        unit: 'KB',
+        lastUpdate: '2021-01-01',
+        lastEditor: 'Tom',
     },
     {
-        date: '2016-05-02',
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: 'No. 189, Grove St, Los Angeles',
-        zip: 'CA 90036',
+        name: 'None2',
+        size: '1',
+        unit: 'KB',
+        lastUpdate: '2021-01-01',
+        lastEditor: 'Tom',
     },
     {
-        date: '2016-05-04',
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: 'No. 189, Grove St, Los Angeles',
-        zip: 'CA 90036',
-    },
-    {
-        date: '2016-05-01',
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: 'No. 189, Grove St, Los Angeles',
-        zip: 'CA 90036',
+        name: 'None2',
+        size: '1',
+        unit: 'KB',
+        lastUpdate: '2021-01-01',
+        lastEditor: 'Tom',
     },
 ]
+
+
 </script>
 
 <style scoped lang="scss">
-//.line {
-//    border: 1px solid var(--el-border-color);
-//}
+.el-table {
+    border: 1px solid #181818;
+}
 </style>

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import TitleBar from "./components/Header/TitleBar.vue";
+import TitleBar from "./components/header/TitleBar.vue";
 
 </script>
 
 <template>
     <el-config-provider>
         <el-container class="full-height">
-            <el-header style="border-bottom: #181818 solid 0px">
+            <el-header style="border-bottom: #181818 solid 0">
                 <TitleBar/>
             </el-header>
             <el-main>
@@ -19,13 +19,12 @@ import TitleBar from "./components/Header/TitleBar.vue";
     </el-config-provider>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 :global(body) {
     margin: 0;
-}
-
-:global(body *) {
-    box-sizing: border-box;
+    & * {
+        box-sizing: border-box;
+    }
 }
 
 .full-height {

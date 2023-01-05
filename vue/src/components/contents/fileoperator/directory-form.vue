@@ -1,8 +1,10 @@
-<template :class="['template']">
+<template>
     <el-col :class="['col']" :span="2">
-        <el-icon :class="['directory-' + pass, 'icon']" :size="32">
-            <Edit/>
-        </el-icon>
+        <p>
+            <el-icon :class="['directory-' + pass, 'icon']">
+                <Edit/>
+            </el-icon>
+        </p>
     </el-col>
     <el-col :class="['col']" :span="10">
         <p :class="['directory-' + pass,'file-name']">1</p>
@@ -32,7 +34,16 @@ const props = defineProps<{
 </script>
 
 <style scoped lang="scss">
-.template {
-    border: 1px solid var(--el-border-color);
+.col {
+    border-bottom: 1px solid var(--el-border-color);
+    padding: 15px;
+
+    &:first-child {
+        border-left: 1px solid var(--el-border-color);
+    }
+
+    &:last-child {
+        border-right: 1px solid var(--el-border-color);
+    }
 }
 </style>
