@@ -2,10 +2,10 @@
     <div style="display: flex; align-items: center">
         <file-list-tree/>
         <el-table
-            :data="tableData"
-            style="width: 100%"
-            highlight-current-row
-            @current-change="handleCurrentChange"
+                :data="tableData"
+                style="width: 100%"
+                highlight-current-row
+                @current-change="handleCurrentChange"
         >
             <el-table-column prop="name" label="Name">
                 <template #default="scope">
@@ -30,9 +30,9 @@
                 <template #default="scope">
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
                     <el-button
-                        size="small"
-                        type="danger"
-                        @click="handleDelete(scope.$index, scope.row)"
+                            size="small"
+                            type="danger"
+                            @click="handleDelete(scope.$index, scope.row)"
                     >Delete
                     </el-button
                     >
@@ -48,7 +48,6 @@ import {ElTable} from 'element-plus'
 import {Folder} from '@element-plus/icons-vue'
 import FileListHeader from "@/components/contents/fileoperator/file-list-header.vue";
 import FileListTree from "@/components/contents/fileoperator/file-list-tree.vue";
-import { defineStore } from "pinia";
 
 interface File {
     name: string
@@ -85,7 +84,7 @@ const tableData = [
         lastEditor: 'Tom',
     },
     {
-        name: 'None2',
+        name: 'None3',
         size: '1',
         unit: 'KB',
         lastUpdate: '2021-01-01',
