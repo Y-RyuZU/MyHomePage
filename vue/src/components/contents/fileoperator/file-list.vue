@@ -2,10 +2,10 @@
     <div style="display: flex; align-items: center" @drop.prevent="onDrop">
         <file-list-tree/>
         <el-table
-                :data="tableData"
-                style="width: 100%"
-                highlight-current-row
-                @current-change="handleCurrentChange"
+            :data="tableData"
+            style="width: 100%"
+            highlight-current-row
+            @current-change="handleCurrentChange"
         >
             <el-table-column prop="name" label="Name">
                 <template #default="scope">
@@ -30,9 +30,9 @@
                 <template #default="scope">
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
                     <el-button
-                            size="small"
-                            type="danger"
-                            @click="handleDelete(scope.$index, scope.row)"
+                        size="small"
+                        type="danger"
+                        @click="handleDelete(scope.$index, scope.row)"
                     >Delete
                     </el-button
                     >

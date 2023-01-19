@@ -1,6 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router'
-// @ts-ignore
-import pages from '~pages'
+import pages from 'virtual:generated-pages'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -62,7 +61,12 @@ const router = createRouter({
             path: "/loginform",
             name: "LoginForm",
             component: () => import("../components/contents/LoginForm/LoginForm.vue")
-        }, ...pages,
+        }, pages,
+        {
+            path: "/contentsmanager",
+            name: "ContentsManager",
+            component: () => import("../pages/ContentsManager.vue")
+        },
         {
             path: "/file-list",
             name: "file-list",
