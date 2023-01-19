@@ -55,7 +55,7 @@ const props = {
     label: 'label',
     children: 'children',
 }
-const data = createData(4, 30, 40)
+const data = createData(3, 15, 20)
 
 const drawerRef = ref<InstanceType<typeof ElDrawer>>()
 
