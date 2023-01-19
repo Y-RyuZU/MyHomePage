@@ -1,5 +1,5 @@
 <template>
-    <div style="display: flex; align-items: center" @drop.prevent="onDrop">
+    <div style="display: flex; align-items: center" @drop.prevent="onDrop" @dragover.prevent>
         <file-list-tree/>
         <el-table
                 :data="tableData"
@@ -74,7 +74,9 @@ const onDrop = (e: DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
     const file = e.dataTransfer?.files
+    console.log("file check")
     if (!file) return
+    console.log("file true")
     const files = [...file]
     files.forEach(file => {
         const url = `http://localhost:8080/api/files/upload`
