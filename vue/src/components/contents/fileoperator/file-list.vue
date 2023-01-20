@@ -1,5 +1,6 @@
 <template>
-    <div style="display: flex; align-items: center" :class="{enter: enterCounter > 0}" @drop.prevent="onDrop" @dragenter="onDragEnter" @dragleave="onDragLeave" @dragover.prevent>
+    <div style="display: flex; align-items: center" :class="{enter: enterCounter > 0}" @drop.prevent="onDrop"
+         @dragenter="onDragEnter" @dragleave="onDragLeave" @dragover.prevent>
         <file-list-tree/>
         <el-table
                 :data="tableData"
@@ -62,19 +63,16 @@ interface File {
 const tree = ref(false)
 const enterCounter = ref(0)
 const selecting = ref<File>()
-
 const getType = (name: string) => {
     return name.endsWith('.' + new RegExp('.*')) ? 'file' : 'folder'
 }
 const handleCurrentChange = (val: File | undefined) => {
     selecting.value = val
 }
-
 const onDrop = (e: DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
     enterCounter.value = 0
-
     const file = e.dataTransfer?.files
     if (!file) return
     const files = [...file]
@@ -91,15 +89,12 @@ const onDrop = (e: DragEvent) => {
         })
     })
 }
-
 const onDragEnter = (e: DragEvent) => {
     enterCounter.value++
 }
-
 const onDragLeave = (e: DragEvent) => {
     enterCounter.value--
 }
-
 const tableData = [
     {
         name: 'None1',
@@ -123,7 +118,6 @@ const tableData = [
         lastEditor: 'Tom',
     },
 ]
-
 </script>
 
 <style scoped lang="scss">
