@@ -1,5 +1,5 @@
 <template>
-    <div style="display: flex; align-items: center" @drop.prevent="onDrop" @dragover.prevent>
+    <div style="display: flex; align-items: center" :class="{enter: enterCounter > 0}" @drop.prevent="onDrop" @dragenter="onDragEnter" @dragleave="onDragLeave" @dragover.prevent>
         <file-list-tree/>
         <el-table
                 :data="tableData"
@@ -60,7 +60,7 @@ interface File {
 }
 
 const tree = ref(false)
-
+const enterCounter = ref(0)
 const selecting = ref<File>()
 
 const getType = (name: string) => {
@@ -73,10 +73,10 @@ const handleCurrentChange = (val: File | undefined) => {
 const onDrop = (e: DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
+    enterCounter.value = 0
+
     const file = e.dataTransfer?.files
-    console.log("file check")
     if (!file) return
-    console.log("file true")
     const files = [...file]
     files.forEach(file => {
         const url = `http://localhost:8080/api/files/upload`
@@ -90,6 +90,14 @@ const onDrop = (e: DragEvent) => {
             console.log(error)
         })
     })
+}
+
+const onDragEnter = (e: DragEvent) => {
+    enterCounter.value++
+}
+
+const onDragLeave = (e: DragEvent) => {
+    enterCounter.value--
 }
 
 const tableData = [
@@ -121,5 +129,13 @@ const tableData = [
 <style scoped lang="scss">
 .el-table {
     border: 1px solid #181818;
+}
+
+div {
+    * {
+        &.enter {
+            opacity: 0.2;
+        }
+    }
 }
 </style>
