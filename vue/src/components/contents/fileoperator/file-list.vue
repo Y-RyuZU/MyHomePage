@@ -3,7 +3,7 @@
          @dragenter="onDragEnter" @dragleave="onDragLeave" @dragover.prevent>
         <file-list-tree/>
         <el-table
-                :data="tableData"
+                :data="table"
                 style="width: 100%"
                 highlight-current-row
                 @current-change="handleCurrentChange"
@@ -44,20 +44,23 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue'
+import {onBeforeMount, ref} from 'vue'
 import {ElTable} from 'element-plus'
 import {Folder} from '@element-plus/icons-vue'
 import FileListHeader from "@/components/contents/fileoperator/file-list-header.vue";
 import FileListTree from "@/components/contents/fileoperator/file-list-tree.vue";
 import axios from "axios";
+import {useRoute} from 'vue-router'
+
+console.log(Array.from(useRoute().params.path).join('/'))
 
 interface File {
     name: string
     size: number
     unit: string
-    type: "file" | "folder"
-    lastUpdate: string
-    lastEditor: string
+    type: "file" | "directory"
+    lastUpdate?: string
+    lastEditor?: string
 }
 
 const tree = ref(false)
@@ -89,12 +92,22 @@ const onDrop = (e: DragEvent) => {
         })
     })
 }
-const onDragEnter = (e: DragEvent) => {
+const onDragEnter = () => {
     enterCounter.value++
 }
-const onDragLeave = (e: DragEvent) => {
+const onDragLeave = () => {
     enterCounter.value--
 }
+
+
+const table = ref<File[]>([])
+
+onBeforeMount(async () => {
+        const response = await fetch(import.meta.env.MODE === "development" ? "http://localhost:10000/api/files/get" : "/api");
+        table.value = await response.json() as File[];
+    }
+)
+
 const tableData = [
     {
         name: 'None1',

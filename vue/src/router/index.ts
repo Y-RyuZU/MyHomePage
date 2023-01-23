@@ -64,7 +64,7 @@ const router = createRouter({
             component: () => import("../components/contents/LoginForm/LoginForm.vue")
         }, ...pages,
         {
-            path: "/file-list",
+            path: "/file-list/:path*",
             name: "file-list",
             component: () => import("../components/contents/fileoperator/file-list.vue")
         },
