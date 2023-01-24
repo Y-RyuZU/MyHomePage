@@ -80,7 +80,7 @@ const onDrop = (e: DragEvent) => {
     if (!file) return
     const files = [...file]
     files.forEach(file => {
-        const url = `http://localhost:8080/api/files/upload`
+        const url = `http://localhost:10000/api/files/upload`
         const path = 'debug/path1'
         let form = new FormData()
         form.append('file', file)
@@ -98,7 +98,6 @@ const onDragEnter = () => {
 const onDragLeave = () => {
     enterCounter.value--
 }
-
 
 const table = ref<File[]>([])
 
