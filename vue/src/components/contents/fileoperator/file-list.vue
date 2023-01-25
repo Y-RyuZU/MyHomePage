@@ -1,7 +1,7 @@
 <template>
     <div style="display: flex; align-items: center" :class="{enter: enterCounter > 0}" @drop.prevent="onDrop"
          @dragenter="onDragEnter" @dragleave="onDragLeave" @dragover.prevent>
-        <file-list-tree/>
+        <file-list-tree :path="getPath()"/>
         <el-table
                 :data="table"
                 style="width: 100%"
@@ -52,7 +52,7 @@ import FileListTree from "@/components/contents/fileoperator/file-list-tree.vue"
 import axios from "axios";
 import {useRoute} from 'vue-router'
 
-console.log(Array.from(useRoute().params.path).join('/'))
+console.log(Array.from(useRoute().path).join('/'))
 
 interface File {
     name: string
@@ -97,6 +97,10 @@ const onDragEnter = () => {
 }
 const onDragLeave = () => {
     enterCounter.value--
+}
+
+const getPath = () => {
+    return useRoute().hash
 }
 
 const table = ref<File[]>([])

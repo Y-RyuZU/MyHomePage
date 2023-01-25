@@ -8,9 +8,9 @@
     >
         <el-tree-v2 :data="tree" :props="propsDirectory" :height="1000">
             <template #default="{ node, data }">
-                <div style="display: flex; align-items: center; justify-content: space-between">
-                    <span style="margin-left: 10px">{{ data.currentValue }}</span>
-                    <el-icon :size="20">
+                <div style="display: flex; align-items: center;">
+                    <p style="margin-left: 0; margin-right: auto">{{node.label}}</p>
+                    <el-icon style="margin-left: auto; margin-right: 0;" @click="changeDirectory(data.path)" :size="20">
                         <Check/>
                     </el-icon>
                 </div>
@@ -25,6 +25,8 @@ import {ElDrawer} from 'element-plus'
 import {useTreeStore} from "@/stores/tree";
 import {storeToRefs} from "pinia";
 import {Check} from '@element-plus/icons-vue'
+import router from "@/router";
+import {useRouter} from "vue-router";
 
 interface DirectoryTree {
     path: string
@@ -33,7 +35,7 @@ interface DirectoryTree {
 }
 
 const propsDirectory = {
-    value: 'name',
+    value: 'path',
     label: 'name',
     children: 'children',
 }
@@ -47,6 +49,15 @@ onBeforeMount(async () => {
 })
 
 const drawerRef = ref<InstanceType<typeof ElDrawer>>()
+
+const changeDirectory = (path: string) => {
+    router.push({path: props.path + '/' + path})
+    drawerRef.value?.close()
+}
+
+const props = defineProps<{
+    path: () => string
+}>()
 
 const store = useTreeStore()
 const {opener} = storeToRefs(store)
