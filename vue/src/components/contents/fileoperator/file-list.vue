@@ -100,7 +100,7 @@ const onDragLeave = () => {
 }
 
 const getPath = () => {
-    return useRoute().hash
+    return useRoute().path
 }
 
 const table = ref<File[]>([])
