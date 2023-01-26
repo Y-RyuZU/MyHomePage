@@ -1,9 +1,9 @@
 <template>
     <div style="display: flex; align-items: center" :class="{enter: enterCounter > 0}" @drop.prevent="onDrop"
          @dragenter="onDragEnter" @dragleave="onDragLeave" @dragover.prevent>
-        <file-list-tree :path="getPath()"/>
+        <file-list-tree :path="getPath"/>
         <el-table
-                :data="table"
+                :data="data"
                 style="width: 100%"
                 highlight-current-row
                 @current-change="handleCurrentChange"
@@ -44,15 +44,14 @@
 </template>
 
 <script setup lang="ts">
-import {onBeforeMount, ref} from 'vue'
+import {ref} from 'vue'
 import {ElTable} from 'element-plus'
 import {Folder} from '@element-plus/icons-vue'
 import FileListHeader from "@/components/contents/fileoperator/file-list-header.vue";
 import FileListTree from "@/components/contents/fileoperator/file-list-tree.vue";
 import axios from "axios";
 import {useRoute} from 'vue-router'
-
-console.log(Array.from(useRoute().path).join('/'))
+import {computedAsync} from "@vueuse/core";
 
 interface File {
     name: string
@@ -63,6 +62,7 @@ interface File {
     lastEditor?: string
 }
 
+const route = useRoute()
 const tree = ref(false)
 const enterCounter = ref(0)
 const selecting = ref<File>()
@@ -99,41 +99,14 @@ const onDragLeave = () => {
     enterCounter.value--
 }
 
-const getPath = () => {
-    return useRoute().path
-}
-
-const table = ref<File[]>([])
-
-onBeforeMount(async () => {
-        const response = await fetch(import.meta.env.MODE === "development" ? "http://localhost:10000/api/files/get" : "/api");
-        table.value = await response.json() as File[];
+const data = computedAsync(
+    async () => {
+        const path = [route.params.path].flat().join('/')
+        const response = await axios.get('http://localhost:10000/api/files/get/' + path);
+        return await response.data as File[];
     }
 )
 
-const tableData = [
-    {
-        name: 'None1',
-        size: '1',
-        unit: 'KB',
-        lastUpdate: '2021-01-01',
-        lastEditor: 'Tom',
-    },
-    {
-        name: 'None2',
-        size: '1',
-        unit: 'KB',
-        lastUpdate: '2021-01-01',
-        lastEditor: 'Tom',
-    },
-    {
-        name: 'None2',
-        size: '1',
-        unit: 'KB',
-        lastUpdate: '2021-01-01',
-        lastEditor: 'Tom',
-    },
-]
 </script>
 
 <style scoped lang="scss">

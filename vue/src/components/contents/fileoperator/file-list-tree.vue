@@ -9,7 +9,7 @@
         <el-tree-v2 :data="tree" :props="propsDirectory" :height="1000">
             <template #default="{ node, data }">
                 <div style="display: flex; align-items: center;">
-                    <p style="margin-left: 0; margin-right: auto">{{node.label}}</p>
+                    <p style="margin: 0;">{{ node.label }}</p>
                     <el-icon style="margin-left: auto; margin-right: 0;" @click="changeDirectory(data.path)" :size="20">
                         <Check/>
                     </el-icon>
@@ -26,13 +26,17 @@ import {useTreeStore} from "@/stores/tree";
 import {storeToRefs} from "pinia";
 import {Check} from '@element-plus/icons-vue'
 import router from "@/router";
-import {useRouter} from "vue-router";
+import {useRoute} from "vue-router";
+import axios from "axios";
 
 interface DirectoryTree {
     path: string
     name: string
     children?: DirectoryTree[]
 }
+
+const store = useTreeStore()
+const route = useRoute()
 
 const propsDirectory = {
     value: 'path',
@@ -43,23 +47,17 @@ const propsDirectory = {
 const tree = ref<DirectoryTree[]>([])
 
 onBeforeMount(async () => {
-    const response = await fetch(import.meta.env.MODE === "development" ? "http://localhost:10000/api/files/tree/get" : "/api");
-    const directoryTree = await response.json();
-    tree.value = Array.of(directoryTree);
+    const response = await axios("http://localhost:10000/api/files/tree/get/src");
+    tree.value = Array.of(await response.data);
 })
 
 const drawerRef = ref<InstanceType<typeof ElDrawer>>()
 
 const changeDirectory = (path: string) => {
-    router.push({path: props.path + '/' + path})
+    router.push({path: (route.path.replace("/" + [route.params.path].flat().join('/'), "")) + "/" + path})
     drawerRef.value?.close()
 }
 
-const props = defineProps<{
-    path: () => string
-}>()
-
-const store = useTreeStore()
 const {opener} = storeToRefs(store)
 </script>
 
