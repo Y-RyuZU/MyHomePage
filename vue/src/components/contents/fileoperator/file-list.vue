@@ -6,7 +6,7 @@
                 :data="data"
                 style="width: 100%"
                 highlight-current-row
-                @current-change="handleCurrentChange"
+                @selection-change="handleSelectionChange"
         >
             <el-table-column prop="name" label="Name">
                 <template #default="scope">
@@ -52,24 +52,16 @@ import FileListTree from "@/components/contents/fileoperator/file-list-tree.vue"
 import axios from "axios";
 import {useRoute} from 'vue-router'
 import {computedAsync} from "@vueuse/core";
-
-interface File {
-    name: string
-    size: number
-    unit: string
-    type: "file" | "directory"
-    lastUpdate?: string
-    lastEditor?: string
-}
+import type {File} from "@/stores/file-interface";
 
 const route = useRoute()
 const tree = ref(false)
 const enterCounter = ref(0)
-const selecting = ref<File>()
+const selecting = ref<File[]>([])
 const getType = (name: string) => {
     return name.endsWith('.' + new RegExp('.*')) ? 'file' : 'folder'
 }
-const handleCurrentChange = (val: File | undefined) => {
+const handleSelectionChange = (val: File[]) => {
     selecting.value = val
 }
 const onDrop = (e: DragEvent) => {

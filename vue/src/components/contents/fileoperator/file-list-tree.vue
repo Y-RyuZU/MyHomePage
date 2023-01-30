@@ -9,10 +9,10 @@
         <el-tree-v2 :data="tree" :props="propsDirectory" :height="1000">
             <template #default="{ node, data }">
                 <div style="display: flex; align-items: center;">
-                    <p style="margin: 0;">{{ node.label }}</p>
-                    <el-icon style="margin-left: auto; margin-right: 0;" @click="changeDirectory(data.path)" :size="20">
-                        <Check/>
-                    </el-icon>
+                    <p style="margin: 0;" @click="changeDirectory(data.path)">{{ node.label }}</p>
+<!--                    <el-icon style="margin-left: auto; margin-right: 0;" :size="20">-->
+<!--                        <Check/>-->
+<!--                    </el-icon>-->
                 </div>
             </template>
         </el-tree-v2>

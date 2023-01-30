@@ -26,18 +26,12 @@
 import {computed, ref} from 'vue'
 import {Share, Edit, CopyDocument, Sort, Download, Delete,Guide} from '@element-plus/icons-vue'
 import {useTreeStore} from "@/stores/tree";
+import {useSelectingFilesStore} from "@/stores/selecting-files";
 import {storeToRefs} from "pinia";
-
-interface File {
-    name: string
-    size: number
-    unit: string
-    type: "file" | "folder"
-    lastUpdate: string
-    lastEditor: string
-}
+import type {File} from "@/stores/file-interface"
 
 const tree = useTreeStore()
+const useSlectingFilesStore = useSelectingFilesStore()
 
 </script>
 
