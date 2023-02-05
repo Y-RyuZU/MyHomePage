@@ -4,9 +4,10 @@
         <file-list-tree :path="getPath"/>
         <el-table
                 :data="data"
+                :row-class-name="rowClassName"
                 style="width: 100%"
-                @selection-change="handleSelectionChange"
-                @row-click.ctrl
+                @selection-change="selectionChange"
+                @row-click="rowClick"
         >
             <el-table-column prop="name" label="Name">
                 <template #default="scope">
@@ -18,8 +19,8 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column type="selection" width="55"/>
             <el-table-column prop="size" label="Size"/>
+            <el-table-column prop="selected" label="Selected"/>
             <el-table-column prop="lastUpdate" label="Last Update"/>
             <el-table-column prop="lastEditor" label="Last Editor"/>
             <el-table-column align="right" width="450">
@@ -66,12 +67,18 @@ class SelectableFile extends File {
 const route = useRoute()
 const tree = ref(false)
 const enterCounter = ref(0)
-const selecting = ref<File[]>([])
+const selecting = ref<SelectableFile[]>([])
 const getType = (name: string) => {
     return name.endsWith('.' + new RegExp('.*')) ? 'file' : 'folder'
 }
-const handleSelectionChange = (val: File[]) => {
+const selectionChange = (val: SelectableFile[]) => {
     selecting.value = val
+}
+const rowClick = (row: SelectableFile) => {
+    row.selected = !row.selected
+}
+const rowClassName = ({row}: { row: SelectableFile }) => {
+    return row.selected ? 'selected' : '';
 }
 const onDrop = (e: DragEvent) => {
     e.preventDefault()
@@ -105,7 +112,6 @@ const data = computedAsync(
         const path = [route.params.path].flat().join('/')
         const response = await axios.get('http://localhost:10000/api/files/get/' + path);
         const files = response.data as File[];
-        console.log(files.map(file => new SelectableFile(file)))
         return files.map(file => new SelectableFile(file));
     }
 )
@@ -115,6 +121,16 @@ const data = computedAsync(
 <style scoped lang="scss">
 .el-table {
     border: 1px solid #181818;
+
+    //&.selected {
+    //    * {
+    //        background-color: #2a4daf;
+    //    }
+    //}
+}
+
+.selected {
+    background-color: #2a4daf;
 }
 
 div {
