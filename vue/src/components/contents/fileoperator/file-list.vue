@@ -5,8 +5,8 @@
         <el-table
                 :data="data"
                 style="width: 100%"
-                highlight-current-row
                 @selection-change="handleSelectionChange"
+                @row-click.ctrl
         >
             <el-table-column prop="name" label="Name">
                 <template #default="scope">
@@ -18,6 +18,7 @@
                     </div>
                 </template>
             </el-table-column>
+            <el-table-column type="selection" width="55"/>
             <el-table-column prop="size" label="Size"/>
             <el-table-column prop="lastUpdate" label="Last Update"/>
             <el-table-column prop="lastEditor" label="Last Editor"/>
@@ -52,7 +53,15 @@ import FileListTree from "@/components/contents/fileoperator/file-list-tree.vue"
 import axios from "axios";
 import {useRoute} from 'vue-router'
 import {computedAsync} from "@vueuse/core";
-import type {File} from "@/stores/file-interface";
+import {File} from "@/stores/file-interface";
+
+class SelectableFile extends File {
+    selected: boolean = false;
+
+    constructor(file: File) {
+        super(file.name, file.size, file.unit, file.type, file.lastUpdate, file.lastEditor);
+    }
+}
 
 const route = useRoute()
 const tree = ref(false)
@@ -95,7 +104,9 @@ const data = computedAsync(
     async () => {
         const path = [route.params.path].flat().join('/')
         const response = await axios.get('http://localhost:10000/api/files/get/' + path);
-        return await response.data as File[];
+        const files = response.data as File[];
+        console.log(files.map(file => new SelectableFile(file)))
+        return files.map(file => new SelectableFile(file));
     }
 )
 
