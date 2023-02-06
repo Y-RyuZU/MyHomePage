@@ -53,7 +53,7 @@ const drawerRef = ref<InstanceType<typeof ElDrawer>>()
 
 const changeDirectory = (path: string) => {
     storeFiles.computedSelectingFiles = []
-    router.push({path: (route.path.replace("/" + [route.params.path].flat().join('/'), "")) + "/" + path})
+    router.push({path: (route.path.replace("/" + [route.params.path].flat().join('/'), "")) + path})
     drawerRef.value?.close()
 }
 
