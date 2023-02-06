@@ -3,11 +3,11 @@
          @dragenter="onDragEnter" @dragleave="onDragLeave" @dragover.prevent>
         <file-list-tree :path="getPath"/>
         <el-table
-                :data="data"
-                :row-class-name="rowClassName"
-                style="width: 100%"
-                @selection-change="selectionChange"
-                @row-click="rowClick"
+            :data="data"
+            style="width: 100%"
+            :row-style="rowStyle"
+            @selection-change="selectionChange"
+            @row-click="rowClick"
         >
             <el-table-column prop="name" label="Name">
                 <template #default="scope">
@@ -20,7 +20,6 @@
                 </template>
             </el-table-column>
             <el-table-column prop="size" label="Size"/>
-            <el-table-column prop="selected" label="Selected"/>
             <el-table-column prop="lastUpdate" label="Last Update"/>
             <el-table-column prop="lastEditor" label="Last Editor"/>
             <el-table-column align="right" width="450">
@@ -33,9 +32,9 @@
                 <template #default="scope">
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
                     <el-button
-                            size="small"
-                            type="danger"
-                            @click="handleDelete(scope.$index, scope.row)"
+                        size="small"
+                        type="danger"
+                        @click="handleDelete(scope.$index, scope.row)"
                     >Delete
                     </el-button
                     >
@@ -53,16 +52,9 @@ import FileListHeader from "@/components/contents/fileoperator/file-list-header.
 import FileListTree from "@/components/contents/fileoperator/file-list-tree.vue";
 import axios from "axios";
 import {useRoute} from 'vue-router'
+import {useSelectingFilesStore} from "@/stores/selecting-files";
 import {computedAsync} from "@vueuse/core";
-import {File} from "@/stores/file-interface";
-
-class SelectableFile extends File {
-    selected: boolean = false;
-
-    constructor(file: File) {
-        super(file.name, file.size, file.unit, file.type, file.lastUpdate, file.lastEditor);
-    }
-}
+import {File, SelectableFile} from "@/stores/file-interface";
 
 const route = useRoute()
 const tree = ref(false)
@@ -77,8 +69,8 @@ const selectionChange = (val: SelectableFile[]) => {
 const rowClick = (row: SelectableFile) => {
     row.selected = !row.selected
 }
-const rowClassName = ({row}: { row: SelectableFile }) => {
-    return row.selected ? 'selected' : '';
+const rowStyle = ({row}: { row: SelectableFile }) => {
+    return row.selected ? 'background-color: rgba(100,100,255,0.3);' : '';
 }
 const onDrop = (e: DragEvent) => {
     e.preventDefault()
@@ -112,25 +104,17 @@ const data = computedAsync(
         const path = [route.params.path].flat().join('/')
         const response = await axios.get('http://localhost:10000/api/files/get/' + path);
         const files = response.data as File[];
+        storeFiles.computedSelectingFiles = files;
         return files.map(file => new SelectableFile(file));
     }
 )
 
+const storeFiles = useSelectingFilesStore()
 </script>
 
 <style scoped lang="scss">
 .el-table {
     border: 1px solid #181818;
-
-    //&.selected {
-    //    * {
-    //        background-color: #2a4daf;
-    //    }
-    //}
-}
-
-.selected {
-    background-color: #2a4daf;
 }
 
 div {

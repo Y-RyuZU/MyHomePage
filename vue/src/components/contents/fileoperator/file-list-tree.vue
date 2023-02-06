@@ -28,15 +28,13 @@ import {Check} from '@element-plus/icons-vue'
 import router from "@/router";
 import {useRoute} from "vue-router";
 import axios from "axios";
+import {useSelectingFilesStore} from "@/stores/selecting-files";
 
 interface DirectoryTree {
     path: string
     name: string
     children?: DirectoryTree[]
 }
-
-const store = useTreeStore()
-const route = useRoute()
 
 const propsDirectory = {
     value: 'path',
@@ -54,11 +52,15 @@ onBeforeMount(async () => {
 const drawerRef = ref<InstanceType<typeof ElDrawer>>()
 
 const changeDirectory = (path: string) => {
+    storeFiles.computedSelectingFiles = []
     router.push({path: (route.path.replace("/" + [route.params.path].flat().join('/'), "")) + "/" + path})
     drawerRef.value?.close()
 }
 
-const {opener} = storeToRefs(store)
+const storeTree = useTreeStore()
+const storeFiles = useSelectingFilesStore()
+const route = useRoute()
+const {opener} = storeToRefs(storeTree)
 </script>
 
 <style scoped lang="scss">

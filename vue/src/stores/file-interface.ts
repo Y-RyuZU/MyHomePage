@@ -15,3 +15,11 @@ export class File {
         this.lastEditor = lastEditor
     }
 }
+
+export class SelectableFile extends File {
+    selected: boolean = false;
+
+    constructor(file: File) {
+        super(file.name, file.size, file.unit, file.type, file.lastUpdate, file.lastEditor);
+    }
+}

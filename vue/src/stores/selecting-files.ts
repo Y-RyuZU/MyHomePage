@@ -1,14 +1,16 @@
 import {ref, computed} from 'vue'
 import {defineStore} from 'pinia'
-import type {File} from "@/stores/file-interface"
+import {File,SelectableFile} from "@/stores/file-interface"
 import axios from "axios";
 
 export const useSelectingFilesStore = defineStore('selectingFiles', () => {
-    const selectedFiles = ref<File[]>([])
+    const selectingFiles = ref<File[]>([])
+    const computedSelectingFiles = computed({
+        get: () => selectingFiles.value,
+        set: (value: File[]) => {
+            selectingFiles.value = value.filter((file) => file instanceof SelectableFile ? file.selected : true).map((file) => file as File)
+        }
+    })
 
-    function removeFile(file: File) {
-        axios.delete('/api/files/' + file.id)
-    }
-
-    return {selectedFiles}
+    return {computedSelectingFiles}
 })
