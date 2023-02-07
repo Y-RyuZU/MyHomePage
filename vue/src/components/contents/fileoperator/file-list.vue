@@ -3,11 +3,11 @@
          @dragenter="onDragEnter" @dragleave="onDragLeave" @dragover.prevent>
         <file-list-tree :path="getPath"/>
         <el-table
-            :data="data"
-            style="width: 100%"
-            :row-style="rowStyle"
-            @selection-change="selectionChange"
-            @row-click="rowClick"
+                :data="data"
+                style="width: 100%"
+                :row-style="rowStyle"
+                @selection-change="selectionChange"
+                @row-click="rowClick"
         >
             <el-table-column prop="name" label="Name">
                 <template #default="scope">
@@ -32,9 +32,9 @@
                 <template #default="scope">
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
                     <el-button
-                        size="small"
-                        type="danger"
-                        @click="handleDelete(scope.$index, scope.row)"
+                            size="small"
+                            type="danger"
+                            @click="handleDelete(scope.$index, scope.row)"
                     >Delete
                     </el-button
                     >
@@ -120,7 +120,7 @@ const storeFiles = useSelectingFilesStore()
 div {
     * {
         &.enter {
-            opacity: 0.2;
+            opacity: 0.4;
         }
     }
 }
