@@ -8,9 +8,18 @@ export const useSelectingFilesStore = defineStore('selectingFiles', () => {
     const computedSelectingFiles = computed({
         get: () => selectingFiles.value,
         set: (value: File[]) => {
+            if(!value) return;
             selectingFiles.value = value.filter((file) => file instanceof SelectableFile ? file.selected : true).map((file) => file as File)
         }
     })
 
-    return {computedSelectingFiles}
+    function printSelectingFiles() {
+        console.log(selectingFiles.value)
+    }
+
+    function addFile(file: File) {
+        selectingFiles.value.push(file)
+    }
+
+    return {computedSelectingFiles,printSelectingFiles,addFile}
 })

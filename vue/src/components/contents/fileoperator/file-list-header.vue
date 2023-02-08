@@ -3,7 +3,10 @@
         <Share/>
     </el-icon>
     <el-icon :size="20">
-        <Edit/>
+        <Edit @click="printSelectingFiles"/>
+    </el-icon>
+    <el-icon :size="20">
+        <Top @click="moveUpOneLevel"/>
     </el-icon>
     <el-icon :size="20">
         <CopyDocument/>
@@ -24,14 +27,25 @@
 
 <script setup lang="ts">
 import {computed, ref} from 'vue'
-import {Share, Edit, CopyDocument, Sort, Download, Delete,Guide} from '@element-plus/icons-vue'
+import {Share, Edit, CopyDocument, Sort, Download, Delete, Guide, Top} from '@element-plus/icons-vue'
 import {useTreeStore} from "@/stores/tree";
 import {useSelectingFilesStore} from "@/stores/selecting-files";
 import {storeToRefs} from "pinia";
 import type {File} from "@/stores/file-interface"
+import router from "@/router";
+import {useRoute} from "vue-router";
+
+const moveUpOneLevel = () => {
+    storeFiles.computedSelectingFiles = []
+    const path = route.path.split("/");
+    path.pop();
+    router.push(path.join("/"))
+}
 
 const tree = useTreeStore()
-const useSlectingFilesStore = useSelectingFilesStore()
+const storeFiles = useSelectingFilesStore()
+const route = useRoute()
+const {printSelectingFiles} = storeFiles
 
 </script>
 

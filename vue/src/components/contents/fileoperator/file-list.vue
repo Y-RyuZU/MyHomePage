@@ -3,11 +3,11 @@
          @dragenter="onDragEnter" @dragleave="onDragLeave" @dragover.prevent>
         <file-list-tree :path="getPath"/>
         <el-table
-                :data="data"
-                style="width: 100%"
-                :row-style="rowStyle"
-                @selection-change="selectionChange"
-                @row-click="rowClick"
+            :data="data"
+            style="width: 100%"
+            :row-style="rowStyle"
+            @row-click="rowClick"
+            @row-dblclick="rowDblClick"
         >
             <el-table-column prop="name" label="Name">
                 <template #default="scope">
@@ -20,6 +20,7 @@
                 </template>
             </el-table-column>
             <el-table-column prop="size" label="Size"/>
+            <el-table-column prop="unit" label="Unit"/>
             <el-table-column prop="lastUpdate" label="Last Update"/>
             <el-table-column prop="lastEditor" label="Last Editor"/>
             <el-table-column align="right" width="450">
@@ -32,9 +33,9 @@
                 <template #default="scope">
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
                     <el-button
-                            size="small"
-                            type="danger"
-                            @click="handleDelete(scope.$index, scope.row)"
+                        size="small"
+                        type="danger"
+                        @click="handleDelete(scope.$index, scope.row)"
                     >Delete
                     </el-button
                     >
@@ -55,19 +56,23 @@ import {useRoute} from 'vue-router'
 import {useSelectingFilesStore} from "@/stores/selecting-files";
 import {computedAsync} from "@vueuse/core";
 import {File, SelectableFile} from "@/stores/file-interface";
+import router from "@/router";
 
 const route = useRoute()
 const tree = ref(false)
 const enterCounter = ref(0)
-const selecting = ref<SelectableFile[]>([])
 const getType = (name: string) => {
     return name.endsWith('.' + new RegExp('.*')) ? 'file' : 'folder'
 }
-const selectionChange = (val: SelectableFile[]) => {
-    selecting.value = val
-}
 const rowClick = (row: SelectableFile) => {
     row.selected = !row.selected
+    storeFiles.computedSelectingFiles = data.value
+}
+const rowDblClick = (row: SelectableFile) => {
+    if (row.type === 'file') return
+    storeFiles.computedSelectingFiles = []
+    router.push(route.path + "/" + row.name)
+
 }
 const rowStyle = ({row}: { row: SelectableFile }) => {
     return row.selected ? 'background-color: rgba(100,100,255,0.3);' : '';
@@ -104,7 +109,6 @@ const data = computedAsync(
         const path = [route.params.path].flat().join('/')
         const response = await axios.get('http://localhost:10000/api/files/get/' + path);
         const files = response.data as File[];
-        storeFiles.computedSelectingFiles = files;
         return files.map(file => new SelectableFile(file));
     }
 )
