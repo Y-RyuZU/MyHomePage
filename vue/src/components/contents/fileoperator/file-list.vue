@@ -3,17 +3,19 @@
          @dragenter="onDragEnter" @dragleave="onDragLeave" @dragover.prevent>
         <file-list-tree :path="getPath"/>
         <el-table
-            :data="data"
-            style="width: 100%"
-            :row-style="rowStyle"
-            @row-click="rowClick"
-            @row-dblclick="rowDblClick"
+                :data="data"
+                style="width: 100%"
+                :row-style="rowStyle"
+                @row-click="rowClick"
+                @row-dblclick="rowDblClick"
+                :default-sort="{order: 'descending', prop: 'name'}"
         >
             <el-table-column prop="name" label="Name">
                 <template #default="scope">
                     <div style="display: flex; align-items: center">
                         <el-icon :size="20">
-                            <Folder/>
+                            <Folder v-if="scope.row.type === 'directory'"/>
+                            <DocumentRemove v-else/>
                         </el-icon>
                         <span style="margin-left: 10px">{{ scope.row.name }}</span>
                     </div>
@@ -33,12 +35,11 @@
                 <template #default="scope">
                     <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
                     <el-button
-                        size="small"
-                        type="danger"
-                        @click="handleDelete(scope.$index, scope.row)"
+                            size="small"
+                            type="danger"
+                            @click="handleDelete(scope.$index, scope.row)"
                     >Delete
-                    </el-button
-                    >
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -48,14 +49,14 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import {ElTable} from 'element-plus'
-import {Folder} from '@element-plus/icons-vue'
+import {DocumentRemove, Folder} from '@element-plus/icons-vue'
 import FileListHeader from "@/components/contents/fileoperator/file-list-header.vue";
 import FileListTree from "@/components/contents/fileoperator/file-list-tree.vue";
 import axios from "axios";
-import {useRoute} from 'vue-router'
 import {useSelectingFilesStore} from "@/stores/selecting-files";
 import {computedAsync} from "@vueuse/core";
 import {File, SelectableFile} from "@/stores/file-interface";
+import {useRoute} from 'vue-router'
 import router from "@/router";
 
 const route = useRoute()
@@ -72,7 +73,6 @@ const rowDblClick = (row: SelectableFile) => {
     if (row.type === 'file') return
     storeFiles.computedSelectingFiles = []
     router.push(route.path + "/" + row.name)
-
 }
 const rowStyle = ({row}: { row: SelectableFile }) => {
     return row.selected ? 'background-color: rgba(100,100,255,0.3);' : '';
@@ -109,6 +109,11 @@ const data = computedAsync(
         const path = [route.params.path].flat().join('/')
         const response = await axios.get('http://localhost:10000/api/files/get/' + path);
         const files = response.data as File[];
+        files.sort((a: File, b: File) => {
+            if (a.type === 'directory' && b.type === 'file') return -1
+            if (a.type === 'file' && b.type === 'directory') return 1
+            return a.name.localeCompare(b.name)
+        })
         return files.map(file => new SelectableFile(file));
     }
 )
