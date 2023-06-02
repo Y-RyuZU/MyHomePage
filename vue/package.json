@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.10",
+    "@mdi/font": "^7.2.96",
     "@vueuse/core": "^9.11.1",
     "axios": "^1.2.3",
     "element-plus": "^2.2.17",

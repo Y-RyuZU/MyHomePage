@@ -52,6 +52,9 @@ import {ElTable} from 'element-plus'
 import {DocumentRemove, Folder} from '@element-plus/icons-vue'
 import FileListHeader from "@/components/contents/fileoperator/file-list-header.vue";
 import FileListTree from "@/components/contents/fileoperator/file-list-tree.vue";
+import {Folder} from '@element-plus/icons-vue'
+import FileListHeader from "@/vue/components/contents/fileoperator/file-list-header.vue";
+import FileListTree from "@/vue/components/contents/fileoperator/file-list-tree.vue";
 import axios from "axios";
 import {useSelectingFilesStore} from "@/stores/selecting-files";
 import {computedAsync} from "@vueuse/core";
