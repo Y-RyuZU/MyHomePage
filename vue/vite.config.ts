@@ -9,7 +9,7 @@ export default defineConfig({
     plugins: [
         vue(),
         pages({
-            pagesDir: 'src/pages',
+            pagesDir: 'src/vue/pages',
         }),
     ],
     resolve: {
