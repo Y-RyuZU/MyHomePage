@@ -1,29 +1,25 @@
-<script setup lang="ts">
-import TitleBar from "./vue/components/header/TitleBar.vue";
-import Header from "./vue/components/header/Header.vue";
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
     <v-app id="inspire">
         <v-container class="_header">
-            <Header/>
+            <!--            <Header/>-->
         </v-container>
         <RouterView/>
     </v-app>
-<!--    <el-config-provider>-->
-<!--        <el-container class="full-height">-->
-<!--            <el-header style="border-bottom: #181818 solid 0">-->
-<!--                <TitleBar/>-->
-<!--            </el-header>-->
-<!--            <el-main>-->
-<!--                <RouterView/>-->
-<!--            </el-main>-->
-<!--            <el-footer>-->
+    <!--    <el-config-provider>-->
+    <!--        <el-container class="full-height">-->
+    <!--            <el-header style="border-bottom: #181818 solid 0">-->
+    <!--                <TitleBar/>-->
+    <!--            </el-header>-->
+    <!--            <el-main>-->
+    <!--                <RouterView/>-->
+    <!--            </el-main>-->
+    <!--            <el-footer>-->
 
-<!--            </el-footer>-->
-<!--        </el-container>-->
-<!--    </el-config-provider>-->
+    <!--            </el-footer>-->
+    <!--        </el-container>-->
+    <!--    </el-config-provider>-->
 </template>
 
 <style scoped lang="scss">
