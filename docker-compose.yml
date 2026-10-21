@@ -5,7 +5,7 @@ services:
       context: .
     #      dockerfile: Dockerfile
     #    tty: true
-    image: node:22.23.4-alpine
+    image: node:22.23.4
     working_dir: /usr/src/app
     volumes:
       - ./vue:/usr/src/app
